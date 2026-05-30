@@ -1,0 +1,25 @@
+{
+  "name": "jesus-baptism",
+  "version": "1.0.0",
+  "description": "耶稣受洗 - Remotion Video",
+  "scripts": {
+    "start": "remotion studio",
+    "build": "remotion render JesusBaptism out/jesus-baptism.mp4",
+    "still": "remotion still JesusBaptism out/preview.png --frame=30"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.0",
+    "@remotion/cli": "^4.0.0",
+    "@remotion/captions": "^4.0.0",
+    "@remotion/renderer": "^4.0.0",
+    "@remotion/transitions": "^4.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.0.0"
+  }
+}
