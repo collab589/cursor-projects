@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>耶稣受洗 - 约旦河</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #1a1a2e;
+    font-family: 'Georgia', 'SimSun', 'KaiTi', serif;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .scene {
+    position: relative;
+    width: 900px;
+    height: 550px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    cursor: pointer;
+    user-select: none;
+    transition: box-shadow 0.6s;
+  }
+
+  /* ===== 天空 ===== */
+  .sky {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+      #3A5F8A 0%,      /* 顶部深蓝 */
+      #6B8DB5 8%,
+      #C4A565 25%,     /* 金色过渡 */
+      #E8C878 38%,     /* 暖金色 */
+      #D4A855 50%,
+      #E8CF90 62%,
+      #C9B870 100%
+    );
+  }
+
+  /* 云层 */
+  .clouds {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 350px;
+    height: 100px;
+    z-index: 2;
+  }
+
+  .cloud {
+    position: absolute;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, rgba(255,252,240,0.7) 40%, rgba(255,240,210,0.2) 70%, transparent 100%);
+    border-radius: 50%;
+  }
+
+  .cloud1 {
+    width: 160px; height: 55px;
+    top: 10px; left: 0;
+  }
+  .cloud2 {
+    width: 200px; height: 60px;
+    top: 0; left: 80px;
+    background: radial-gradient(ellipse, rgba(255,255,250,0.95) 0%, rgba(255,248,230,0.75) 40%, rgba(255,235,200,0.15) 70%, transparent 100%);
+  }
+  .cloud3 {
+    width: 140px; height: 45px;
+    top: 20px; left: 200px;
+  }
+  .cloud4 {
+    width: 120px; height: 40px;
+    top: 30px; left: 40px;
+    opacity: 0.7;
+  }
+  .cloud5 {
+    width: 100px; height: 35px;
+    top: 25px; left: 230px;
+    opacity: 0.6;
+  }
+
+  /* 云层之间的裂隙（天开了） */
+  .cloud-gap {
+    position: absolute;
+    top: 18px;
+    left: 145px;
+    width: 60px;
+    height: 65px;
+    z-index: 3;
+    animation: gap-open 2s ease-in-out infinite;
+  }
+
+  @keyframes gap-open {
+    0%, 100% { width: 55px; opacity: 0.85; }
+    50% { width: 70px; opacity: 1; }
+  }
+
+  /* ===== 天堂光芒 ===== */
+  .heavenly-light {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 400px;
+    background: linear-gradient(180deg,
+      rgba(255,255,220,0.7) 0%,
+      rgba(255,240,180,0.4) 15%,
+      rgba(255,220,140,0.25) 35%,
+      rgba(255,200,100,0.1) 60%,
+      transparent 100%
+    );
+    z-index: 1;
+    clip-path: polygon(40% 0%, 60% 0%, 95% 100%, 5% 100%);
+    animation: light-pulse 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes light-pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+
+  /* 次级光束 */
+  .light-rays {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 420px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .ray {
+    position: absolute;
+    background: linear-gradient(180deg,
+      rgba(255,255,200,0.35) 0%,
+      rgba(255,220,130,0.12) 40%,
+      transparent 100%
+    );
+    transform-origin: top center;
+  }
+
+  .ray1 { left: 30%; width: 12px; height: 100%; transform: rotate(-12deg); animation: ray-shift1 4s ease-in-out infinite; }
+  .ray2 { left: 40%; width: 16px; height: 100%; transform: rotate(-4deg); animation: ray-shift2 3.5s ease-in-out infinite; }
+  .ray3 { left: 50%; width: 20px; height: 100%; transform: rotate(0deg); animation: ray-shift3 3s ease-in-out infinite; }
+  .ray4 { left: 58%; width: 14px; height: 100%; transform: rotate(5deg); animation: ray-shift2 3.8s ease-in-out infinite; }
+  .ray5 { left: 66%; width: 10px; height: 100%; transform: rotate(13deg); animation: ray-shift1 4.2s ease-in-out infinite; }
+
+  @keyframes ray-shift1 {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.65; }
+  }
+  @keyframes ray-shift2 {
+    0%, 100% { opacity: 0.4; }
+    33% { opacity: 0.7; }
+    66% { opacity: 0.35; }
+  }
+  @keyframes ray-shift3 {
+    0%, 100% { opacity: 0.45; }
+    50% { opacity: 0.8; }
+  }
+
+  /* 光粒子 */
+  .light-particles {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250px;
+    height: 350px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: rgba(255,255,220,0.8);
+    border-radius: 50%;
+    animation: particle-fall 3s linear infinite;
+  }
+
+  @keyframes particle-fall {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 0.9; }
+    80% { opacity: 0.3; }
+    100% { transform: translateY(340px) translateX(20px); opacity: 0; }
+  }
+
+  .particle:nth-child(1) { left: 20%; animation-duration: 3.2s; animation-delay: 0s; }
+  .particle:nth-child(2) { left: 40%; animation-duration: 2.8s; animation-delay: 0.5s; }
+  .particle:nth-child(3) { left: 55%; animation-duration: 3.5s; animation-delay: 1s; }
+  .particle:nth-child(4) { left: 30%; animation-duration: 2.6s; animation-delay: 1.5s; }
+  .particle:nth-child(5) { left: 60%; animation-duration: 3.1s; animation-delay: 0.8s; }
+  .particle:nth-child(6) { left: 45%; animation-duration: 2.9s; animation-delay: 2s; }
+  .particle:nth-child(7) { left: 70%; animation-duration: 3.3s; animation-delay: 1.2s; }
+  .particle:nth-child(8) { left: 25%; animation-duration: 3.0s; animation-delay: 2.5s; }
+
+  /* ===== 鸽子 ===== */
+  .dove-container {
+    position: absolute;
+    top: 75px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    animation: dove-descend 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes dove-descend {
+    0% { transform: translateX(-50%) translateY(-15px); opacity: 0.3; }
+    10% { transform: translateX(-50%) translateY(-5px); opacity: 0.85; }
+    30% { transform: translateX(calc(-50% + 10px)) translateY(10px); opacity: 1; }
+    50% { transform: translateX(calc(-50% - 8px)) translateY(25px); opacity: 1; }
+    70% { transform: translateX(calc(-50% + 5px)) translateY(40px); opacity: 0.9; }
+    85% { transform: translateX(calc(-50% - 3px)) translateY(55px); opacity: 0.6; }
+    100% { transform: translateX(-50%) translateY(70px); opacity: 0.15; }
+  }
+
+  .dove-body {
+    position: relative;
+    width: 30px;
+    height: 22px;
+    background: radial-gradient(ellipse at 50% 45%, #FFFFFF 0%, #F0F0F0 50%, #E0E0E0 100%);
+    border-radius: 50% 50% 45% 55%;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.5);
+  }
+
+  .dove-head {
+    position: absolute;
+    width: 14px;
+    height: 12px;
+    background: radial-gradient(ellipse at 50% 40%, #FFFFFF 0%, #F5F5F5 100%);
+    border-radius: 50%;
+    top: -5px;
+    right: -3px;
+  }
+
+  .dove-wing {
+    position: absolute;
+    width: 22px;
+    height: 14px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #EAEAEA 50%, #D8D8D8 100%);
+    border-radius: 50% 50% 50% 50%;
+    top: -2px;
+    left: 2px;
+    transform-origin: right center;
+    animation: wing-flap 0.6s ease-in-out infinite;
+  }
+
+  @keyframes wing-flap {
+    0%, 100% { transform: rotate(0deg) scaleY(1); }
+    50% { transform: rotate(-35deg) scaleY(0.5); }
+  }
+
+  .dove-beak {
+    position: absolute;
+    width: 4px;
+    height: 2px;
+    background: #E8A840;
+    border-radius: 1px;
+    top: -2px;
+    right: -3px;
+  }
+
+  /* ===== 远山 & 河岸 ===== */
+  .distant-hills {
+    position: absolute;
+    top: 150px;
+    left: 0;
+    right: 0;
+    height: 100px;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .hill {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .hill1 {
+    left: -5%;
+    width: 55%;
+    height: 100px;
+    background: linear-gradient(180deg, #8B9D6B 0%, #6B7D4B 50%, #5A6B3A 100%);
+    opacity: 0.85;
+  }
+
+  .hill2 {
+    right: -5%;
+    width: 60%;
+    height: 90px;
+    background: linear-gradient(180deg, #7B8D5B 0%, #5B6D3B 50%, #4A5B2A 100%);
+    opacity: 0.8;
+  }
+
+  /* 橄榄树 */
+  .olive-tree {
+    position: absolute;
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .tree-trunk {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 60px;
+    background: linear-gradient(180deg, #8B6B4A 0%, #6B4B30 50%, #4A3020 100%);
+    border-radius: 3px 3px 6px 6px;
+  }
+
+  .tree-canopy {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 55px;
+    background:
+      radial-gradient(ellipse at 30% 40%, #6B8B4A 0%, #4A6B2A 50%, #3A5520 100%);
+    border-radius: 50% 50% 45% 45%;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.15);
+  }
+
+  .tree1 {
+    left: 50px;
+    top: 30px;
+  }
+
+  .tree2 {
+    right: 60px;
+    top: 25px;
+  }
+
+  .tree2 .tree-trunk {
+    height: 50px;
+  }
+
+  .tree2 .tree-canopy {
+    width: 50px;
+    height: 45px;
+    bottom: 35px;
+  }
+
+  /* 芦苇 */
+  .reeds {
+    position: absolute;
+    bottom: 55px;
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .reeds-left {
+    left: 80px;
+  }
+
+  .reeds-right {
+    right: 90px;
+  }
+
+  .reed {
+    position: absolute;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #8B9B5B 0%, #6B7B3B 60%, #5A6A2A 100%);
+    border-radius: 1px;
+    transform-origin: bottom center;
+    animation: reed-sway 3s ease-in-out infinite;
+  }
+
+  @keyframes reed-sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  .reed:nth-child(1) { height: 70px; left: 0; animation-delay: 0s; }
+  .reed:nth-child(2) { height: 80px; left: 8px; animation-delay: 0.3s; }
+  .reed:nth-child(3) { height: 65px; left: 16px; animation-delay: 0.7s; }
+  .reed:nth-child(4) { height: 75px; left: 24px; animation-delay: 1s; }
+  .reed:nth-child(5) { height: 68px; left: 32px; animation-delay: 1.4s; }
+
+  .reed-tip {
+    position: absolute;
+    top: -4px;
+    left: -2px;
+    width: 7px;
+    height: 10px;
+    background: #7B8B4B;
+    border-radius: 50% 50% 10% 10%;
+    transform: rotate(-15deg);
+  }
+
+  /* 河岸岩石 */
+  .rocks {
+    position: absolute;
+    bottom: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .rock {
+    position: absolute;
+    bottom: 0;
+    background: linear-gradient(135deg, #9B8B7B 0%, #7B6B5B 40%, #6B5B4B 100%);
+    border-radius: 40% 50% 30% 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .rock1 { width: 35px; height: 20px; left: 120px; border-radius: 45% 55% 35% 45%; }
+  .rock2 { width: 28px; height: 16px; left: 155px; border-radius: 50% 40% 50% 40%; }
+  .rock3 { width: 30px; height: 18px; right: 130px; border-radius: 40% 50% 45% 45%; }
+  .rock4 { width: 24px; height: 14px; right: 165px; border-radius: 50% 45% 40% 50%; }
+
+  /* ===== 约旦河水 ===== */
+  .river {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 230px;
+    background: linear-gradient(180deg,
+      rgba(70,130,150,0.75) 0%,
+      rgba(60,115,140,0.85) 8%,
+      rgba(45,95,125,0.9) 25%,
+      rgba(35,75,105,0.92) 50%,
+      rgba(25,55,85,0.95) 100%
+    );
+    z-index: 5;
+  }
+
+  /* 水面光泽 */
+  .river::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 40px;
+    background: linear-gradient(180deg,
+      rgba(180,210,230,0.5) 0%,
+      rgba(140,185,210,0.3) 30%,
+      rgba(100,150,180,0.1) 70%,
+      transparent 100%
+    );
+  }
+
+  /* 水波纹理 */
+  .water-waves {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 6;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .wave-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgba(255,255,255,0.12);
+    animation: wave-drift 4s linear infinite;
+  }
+
+  @keyframes wave-drift {
+    0% { transform: translateX(-2%) translateY(0); }
+    25% { transform: translateX(1%) translateY(-1px); }
+    50% { transform: translateX(-1%) translateY(0); }
+    75% { transform: translateX(2%) translateY(1px); }
+    100% { transform: translateX(-2%) translateY(0); }
+  }
+
+  .wave-line:nth-child(1) { top: 15%; animation-duration: 3.5s; animation-delay: 0s; opacity: 0.25; }
+  .wave-line:nth-child(2) { top: 22%; animation-duration: 4.2s; animation-delay: 0.5s; opacity: 0.2; }
+  .wave-line:nth-child(3) { top: 28%; animation-duration: 3.8s; animation-delay: 1s; opacity: 0.22; }
+  .wave-line:nth-child(4) { top: 35%; animation-duration: 4.5s; animation-delay: 1.5s; opacity: 0.18; }
+  .wave-line:nth-child(5) { top: 42%; animation-duration: 3.3s; animation-delay: 0.8s; opacity: 0.2; }
+  .wave-line:nth-child(6) { top: 50%; animation-duration: 4.1s; animation-delay: 2s; opacity: 0.15; }
+  .wave-line:nth-child(7) { top: 58%; animation-duration: 3.7s; animation-delay: 1.2s; opacity: 0.13; }
+  .wave-line:nth-child(8) { top: 66%; animation-duration: 4.3s; animation-delay: 0.3s; opacity: 0.1; }
+
+  /* ===== 耶稣 ===== */
+  .jesus-container {
+    position: absolute;
+    bottom: 120px;
+    left: 310px;
+    z-index: 7;
+    animation: jesus-sway 3s ease-in-out infinite;
+  }
+
+  @keyframes jesus-sway {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    30% { transform: translateX(2px) rotate(0.5deg); }
+    60% { transform: translateX(-1px) rotate(-0.3deg); }
+    85% { transform: translateX(1px) rotate(0.2deg); }
+  }
+
+  /* 耶稣身体（白袍） */
+  .jesus-body {
+    position: relative;
+    width: 70px;
+    height: 160px;
+  }
+
+  .jesus-robe {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 140px;
+    background: linear-gradient(180deg,
+      #F8F4EC 0%,
+      #F0EBE0 20%,
+      #EAE4D8 50%,
+      #E0D8C8 80%,
+      #D5CCB8 100%
+    );
+    border-radius: 30px 30px 20px 20px;
+    box-shadow:
+      0 2px 8px rgba(0,0,0,0.15),
+      inset 0 2px 6px rgba(255,255,255,0.5);
+  }
+
+  /* 袍子褶皱 */
+  .jesus-robe::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 30px 30px 20px 20px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(200,190,170,0.25) 33%,
+      transparent 38%,
+      rgba(200,190,170,0.2) 60%,
+      transparent 65%,
+      rgba(180,170,155,0.2) 85%
+    );
+  }
+
+  /* 耶稣头部 */
+  .jesus-head {
+    position: absolute;
+    width: 44px;
+    height: 52px;
+    background: radial-gradient(ellipse at 50% 35%, #E8C8A0 0%, #D4B08A 40%, #C4A078 100%);
+    border-radius: 50% 50% 42% 42%;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+
+  /* 头发 */
+  .jesus-hair {
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 38px;
+    height: 20px;
+    background: linear-gradient(180deg,
+      #3A2010 0%,
+      #4A3020 30%,
+      #5A3A28 60%,
+      transparent 100%
+    );
+    border-radius: 50% 50% 30% 30%;
+    z-index: 3;
+  }
+
+  .jesus-hair-back {
+    position: absolute;
+    top: 12px;
+    left: -2px;
+    width: 48px;
+    height: 45px;
+    background: linear-gradient(180deg,
+      #3A2010 0%,
+      #4A3020 40%,
+      #3A2010 80%,
+      transparent 100%
+    );
+    border-radius: 0 0 50% 50%;
+    z-index: 1;
+  }
+
+  /* 面部特征 */
+  .jesus-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+  }
+
+  .jesus-eyes {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+  }
+
+  .jesus-eye {
+    position: absolute;
+    width: 3px;
+    height: 1.5px;
+    background: #3A2010;
+    border-radius: 50%;
+    top: 0;
+  }
+  .jesus-eye.left { left: 2px; }
+  .jesus-eye.right { right: 2px; }
+
+  .jesus-nose {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 7px;
+    background: rgba(180,140,110,0.5);
+    border-radius: 50% 50% 20% 20%;
+  }
+
+  /* 胡须 */
+  .jesus-beard {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 14px;
+    background: linear-gradient(180deg,
+      #5A3A28 0%,
+      #4A3020 50%,
+      #3A2010 100%
+    );
+    border-radius: 0 0 50% 50%;
+    z-index: 5;
+  }
+
+  /* 光环 */
+  .jesus-halo {
+    position: absolute;
+    top: -55px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    border: 2px solid rgba(255,215,100,0.4);
+    border-radius: 50%;
+    z-index: 0;
+    animation: halo-glow 2.5s ease-in-out infinite;
+  }
+
+  @keyframes halo-glow {
+    0%, 100% { box-shadow: 0 0 8px rgba(255,215,100,0.3); border-color: rgba(255,215,100,0.3); }
+    50% { box-shadow: 0 0 20px rgba(255,215,100,0.6); border-color: rgba(255,215,100,0.6); }
+  }
+
+  /* ===== 施洗约翰 ===== */
+  .john-container {
+    position: absolute;
+    bottom: 115px;
+    right: 230px;
+    z-index: 7;
+  }
+
+  .john-body {
+    position: relative;
+    width: 70px;
+    height: 155px;
+  }
+
+  /* 约翰袍子（骆驼毛色） */
+  .john-robe {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 62px;
+    height: 135px;
+    background: linear-gradient(180deg,
+      #B8976A 0%,
+      #A08050 20%,
+      #907040 50%,
+      #806038 80%,
+      #705030 100%
+    );
+    border-radius: 30px 30px 20px 20px;
+    box-shadow:
+      0 2px 8px rgba(0,0,0,0.2),
+      inset 0 2px 4px rgba(200,170,130,0.3);
+  }
+
+  .john-robe::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 30px 30px 20px 20px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(139,100,60,0.3) 40%,
+      transparent 45%,
+      rgba(139,100,60,0.2) 70%,
+      transparent 75%
+    );
+  }
+
+  /* 约翰头部 */
+  .john-head {
+    position: absolute;
+    width: 46px;
+    height: 54px;
+    background: radial-gradient(ellipse at 50% 35%, #D4B898 0%, #C4A080 40%, #B09070 100%);
+    border-radius: 50% 50% 42% 42%;
+    top: -52px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+
+  .john-hair {
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 22px;
+    background: linear-gradient(180deg,
+      #2A1A0A 0%,
+      #3A2818 40%,
+      #4A3828 70%,
+      transparent 100%
+    );
+    border-radius: 50% 50% 30% 30%;
+    z-index: 3;
+  }
+
+  .john-beard {
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 16px;
+    background: linear-gradient(180deg,
+      #4A3828 0%,
+      #3A2818 50%,
+      #2A1A0A 100%
+    );
+    border-radius: 0 0 50% 50%;
+    z-index: 5;
+  }
+
+  /* 约翰右臂（伸向耶稣施洗） */
+  .john-arm {
+    position: absolute;
+    top: -30px;
+    left: -55px;
+    width: 60px;
+    height: 16px;
+    background: linear-gradient(180deg, #C4A080 0%, #B09070 50%, #A08060 100%);
+    border-radius: 8px;
+    z-index: 8;
+    transform-origin: right center;
+    animation: arm-pour 2.5s ease-in-out infinite;
+  }
+
+  @keyframes arm-pour {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+  }
+
+  /* 约翰手掌 */
+  .john-hand {
+    position: absolute;
+    top: -33px;
+    left: -67px;
+    width: 18px;
+    height: 14px;
+    background: radial-gradient(ellipse at 50% 40%, #D4B898, #C4A080);
+    border-radius: 40% 40% 45% 45%;
+    z-index: 9;
+    animation: arm-pour 2.5s ease-in-out infinite;
+  }
+
+  /* ===== 水流（从约翰手到耶稣头） ===== */
+  .water-stream {
+    position: absolute;
+    top: -36px;
+    left: -60px;
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(180deg,
+      rgba(140,200,230,0.7) 0%,
+      rgba(120,185,220,0.6) 40%,
+      rgba(160,215,240,0.4) 70%,
+      transparent 100%
+    );
+    border-radius: 2px;
+    z-index: 8;
+    animation: stream-flow 1.2s ease-in-out infinite;
+  }
+
+  @keyframes stream-flow {
+    0%, 100% { height: 18px; opacity: 0.65; }
+    50% { height: 26px; opacity: 0.9; }
+  }
+
+  /* 水滴 */
+  .water-drops {
+    position: absolute;
+    top: -8px;
+    left: -62px;
+    z-index: 9;
+  }
+
+  .drop {
+    position: absolute;
+    width: 3px;
+    height: 5px;
+    background: rgba(180,220,245,0.75);
+    border-radius: 0 50% 50% 50%;
+    transform: rotate(45deg);
+    animation: drop-fall 0.8s ease-in infinite;
+  }
+
+  .drop:nth-child(1) { animation-delay: 0s; left: 0; }
+  .drop:nth-child(2) { animation-delay: 0.25s; left: 4px; }
+  .drop:nth-child(3) { animation-delay: 0.5s; left: -2px; }
+
+  @keyframes drop-fall {
+    0% { transform: rotate(45deg) translateY(0); opacity: 0; }
+    15% { opacity: 0.8; }
+    80% { opacity: 0.3; }
+    100% { transform: rotate(45deg) translateY(12px); opacity: 0; }
+  }
+
+  /* ===== 耶稣周围的水涟漪 ===== */
+  .ripples {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 30px;
+    z-index: 6;
+    pointer-events: none;
+  }
+
+  .ripple {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    border: 1.5px solid rgba(200,225,240,0.4);
+    border-radius: 50%;
+    animation: ripple-out 2.5s ease-out infinite;
+  }
+
+  .ripple:nth-child(1) { animation-delay: 0s; }
+  .ripple:nth-child(2) { animation-delay: 0.8s; }
+  .ripple:nth-child(3) { animation-delay: 1.6s; }
+
+  @keyframes ripple-out {
+    0% { width: 10px; height: 4px; opacity: 0.7; }
+    100% { width: 80px; height: 20px; opacity: 0; }
+  }
+
+  /* ===== 字幕区域 ===== */
+  .subtitle-area {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .subtitle-text {
+    font-size: 20px;
+    color: #FFF;
+    font-family: 'KaiTi', 'STKaiti', 'SimSun', 'Georgia', serif;
+    text-shadow:
+      0 0 8px rgba(0,0,0,0.8),
+      0 0 20px rgba(255,200,100,0.5),
+      0 2px 4px rgba(0,0,0,0.7);
+    letter-spacing: 3px;
+    transition: opacity 0.5s;
+    animation: subtitle-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes subtitle-glow {
+    0%, 100% { text-shadow: 0 0 8px rgba(0,0,0,0.8), 0 0 20px rgba(255,200,100,0.5), 0 2px 4px rgba(0,0,0,0.7); }
+    50% { text-shadow: 0 0 8px rgba(0,0,0,0.8), 0 0 35px rgba(255,220,140,0.7), 0 2px 4px rgba(0,0,0,0.7); }
+  }
+
+  /* 标题 */
+  .scene-title {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 26px;
+    font-weight: bold;
+    color: #FFF;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.5), 0 0 15px rgba(255,200,100,0.4);
+    letter-spacing: 8px;
+    z-index: 15;
+    pointer-events: none;
+    font-family: 'KaiTi', 'STKaiti', 'SimSun', serif;
+    animation: title-glow 3s ease-in-out infinite;
+  }
+
+  @keyframes title-glow {
+    0%, 100% { text-shadow: 0 2px 6px rgba(0,0,0,0.5), 0 0 15px rgba(255,200,100,0.3); }
+    50% { text-shadow: 0 2px 6px rgba(0,0,0,0.5), 0 0 30px rgba(255,220,140,0.7), 0 0 50px rgba(255,180,80,0.3); }
+  }
+
+  /* 提示 */
+  .tap-hint {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.45);
+    font-size: 13px;
+    z-index: 20;
+    pointer-events: none;
+    animation: hint-fade 2s ease-in-out infinite;
+    letter-spacing: 2px;
+  }
+
+  @keyframes hint-fade {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.75; }
+  }
+
+  /* 音量 */
+  .volume-control {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 20;
+  }
+
+  .volume-icon {
+    color: rgba(255,255,255,0.7);
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .volume-icon:hover { color: #fff; }
+
+  .volume-slider {
+    -webkit-appearance: none;
+    width: 70px;
+    height: 3px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    outline: none;
+  }
+  .volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #F5E6C8;
+    cursor: pointer;
+  }
+
+  /* ===== 经文引用 ===== */
+  .bible-ref {
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    font-family: 'Georgia', 'KaiTi', serif;
+    letter-spacing: 1px;
+    margin-top: 4px;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="scene" id="scene" title="点击画面播放/暂停">
+  <!-- 天空 -->
+  <div class="sky"></div>
+
+  <!-- 云层 -->
+  <div class="clouds">
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+    <div class="cloud cloud4"></div>
+    <div class="cloud cloud5"></div>
+    <div class="cloud-gap"></div>
+  </div>
+
+  <!-- 天堂光芒 -->
+  <div class="heavenly-light"></div>
+  <div class="light-rays">
+    <div class="ray ray1"></div>
+    <div class="ray ray2"></div>
+    <div class="ray ray3"></div>
+    <div class="ray ray4"></div>
+    <div class="ray ray5"></div>
+  </div>
+
+  <!-- 光粒子 -->
+  <div class="light-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <!-- 鸽子 -->
+  <div class="dove-container">
+    <div class="dove-body">
+      <div class="dove-head">
+        <div class="dove-beak"></div>
+      </div>
+      <div class="dove-wing"></div>
+    </div>
+  </div>
+
+  <!-- 远山 -->
+  <div class="distant-hills">
+    <div class="hill hill1"></div>
+    <div class="hill hill2"></div>
+  </div>
+
+  <!-- 橄榄树 -->
+  <div class="olive-tree tree1">
+    <div class="tree-trunk"></div>
+    <div class="tree-canopy"></div>
+  </div>
+  <div class="olive-tree tree2">
+    <div class="tree-trunk"></div>
+    <div class="tree-canopy"></div>
+  </div>
+
+  <!-- 芦苇 -->
+  <div class="reeds reeds-left">
+    <div class="reed"><div class="reed-tip"></div></div>
+    <div class="reed"><div class="reed-tip"></div></div>
+    <div class="reed"><div class="reed-tip"></div></div>
+    <div class="reed"><div class="reed-tip"></div></div>
+    <div class="reed"><div class="reed-tip"></div></div>
+  </div>
+  <div class="reeds reeds-right">
+    <div class="reed"><div class="reed-tip"></div></div>
+    <div class="reed"><div class="reed-tip"></div></div>
+    <div class="reed"><div class="reed-tip"></div></div>
+    <div class="reed"><div class="reed-tip"></div></div>
+    <div class="reed"><div class="reed-tip"></div></div>
+  </div>
+
+  <!-- 岩石 -->
+  <div class="rocks">
+    <div class="rock rock1"></div>
+    <div class="rock rock2"></div>
+    <div class="rock rock3"></div>
+    <div class="rock rock4"></div>
+  </div>
+
+  <!-- 约旦河 -->
+  <div class="river">
+    <div class="water-waves">
+      <div class="wave-line"></div>
+      <div class="wave-line"></div>
+      <div class="wave-line"></div>
+      <div class="wave-line"></div>
+      <div class="wave-line"></div>
+      <div class="wave-line"></div>
+      <div class="wave-line"></div>
+      <div class="wave-line"></div>
+    </div>
+  </div>
+
+  <!-- 耶稣 -->
+  <div class="jesus-container">
+    <div class="jesus-body">
+      <div class="jesus-halo"></div>
+      <div class="jesus-head">
+        <div class="jesus-hair-back"></div>
+        <div class="jesus-hair"></div>
+        <div class="jesus-face">
+          <div class="jesus-eyes">
+            <div class="jesus-eye left"></div>
+            <div class="jesus-eye right"></div>
+          </div>
+          <div class="jesus-nose"></div>
+          <div class="jesus-beard"></div>
+        </div>
+      </div>
+      <div class="jesus-robe"></div>
+    </div>
+    <!-- 涟漪 -->
+    <div class="ripples">
+      <div class="ripple"></div>
+      <div class="ripple"></div>
+      <div class="ripple"></div>
+    </div>
+  </div>
+
+  <!-- 施洗约翰 -->
+  <div class="john-container">
+    <div class="john-body">
+      <div class="john-head">
+        <div class="john-hair"></div>
+        <div class="john-beard"></div>
+      </div>
+      <div class="john-robe"></div>
+      <!-- 手臂 -->
+      <div class="john-arm"></div>
+      <div class="john-hand"></div>
+      <!-- 水流 -->
+      <div class="water-stream">
+        <div class="water-drops">
+          <div class="drop"></div>
+          <div class="drop"></div>
+          <div class="drop"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 标题 -->
+  <div class="scene-title">耶 稣 受 洗</div>
+
+  <!-- 字幕 -->
+  <div class="subtitle-area">
+    <span class="subtitle-text" id="subtitle">马太福音 3:16-17</span>
+  </div>
+
+  <!-- 提示 -->
+  <div class="tap-hint">🖱️ 点击画面播放经文朗诵</div>
+
+  <!-- 音量 -->
+  <div class="volume-control">
+    <span class="volume-icon" id="volIcon">🔊</span>
+    <input type="range" class="volume-slider" id="volSlider" min="0" max="100" value="60">
+  </div>
+</div>
+
+<div class="bible-ref">📖 马太福音 3:16-17 · 耶稣受了洗，天忽然为他开了，神的灵仿佛鸽子降下</div>
+
+<script>
+(function() {
+  let audioCtx = null;
+  let masterGain = null;
+  let riverNoise = null;
+  let isPlaying = false;
+  let speechSynth = window.speechSynthesis;
+  let currentUtterance = null;
+
+  const scene = document.getElementById('scene');
+  const volSlider = document.getElementById('volSlider');
+  const volIcon = document.getElementById('volIcon');
+  const subtitle = document.getElementById('subtitle');
+
+  function getAudioCtx() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = parseFloat(volSlider.value) / 100 * 0.5;
+      masterGain.connect(audioCtx.destination);
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    return audioCtx;
+  }
+
+  // ==================== 河流环境音效 ====================
+  // 用低通滤波的白噪声模拟流水声
+  function startRiverSound() {
+    if (riverNoise) return;
+    const ctx = getAudioCtx();
+
+    // 创建持续的白噪声
+    const bufferSize = ctx.sampleRate * 2;
+    const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    const noiseSource = ctx.createBufferSource();
+    noiseSource.buffer = noiseBuffer;
+    noiseSource.loop = true;
+
+    // 低通滤波器 —— 让噪声听起来像流水
+    const lowpass = ctx.createBiquadFilter();
+    lowpass.type = 'lowpass';
+    lowpass.frequency.value = 350;
+    lowpass.Q.value = 0.7;
+
+    // 第二个滤波器增加层次
+    const lowpass2 = ctx.createBiquadFilter();
+    lowpass2.type = 'lowpass';
+    lowpass2.frequency.value = 600;
+    lowpass2.Q.value = 0.5;
+
+    const riverGain = ctx.createGain();
+    riverGain.gain.value = 0.08;
+
+    noiseSource.connect(lowpass);
+    lowpass.connect(lowpass2);
+    lowpass2.connect(riverGain);
+    riverGain.connect(masterGain);
+
+    noiseSource.start();
+    riverNoise = { source: noiseSource, gain: riverGain };
+  }
+
+  function stopRiverSound() {
+    if (riverNoise) {
+      try { riverNoise.source.stop(); } catch(e) {}
+      riverNoise = null;
+    }
+  }
+
+  // ==================== 天堂之音 ====================
+  // 微弱的、飘渺的高频音色
+  function playHeavenlyChime() {
+    if (!isPlaying) return;
+    const ctx = getAudioCtx();
+    const now = ctx.currentTime;
+    const duration = 3.5;
+
+    const frequencies = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
+
+    frequencies.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+
+      gain.gain.setValueAtTime(0, now + i * 0.3);
+      gain.gain.linearRampToValueAtTime(0.06, now + i * 0.3 + 0.4);
+      gain.gain.linearRampToValueAtTime(0.03, now + i * 0.3 + 1.5);
+      gain.gain.linearRampToValueAtTime(0.01, now + duration);
+      gain.gain.linearRampToValueAtTime(0, now + duration + 0.5);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+
+      osc.start(now + i * 0.3);
+      osc.stop(now + duration + 0.5);
+    });
+  }
+
+  // ==================== 语音朗诵 ====================
+  const scriptureLines = [
+    { text: '耶稣受了洗，随即从水里上来。', delay: 0 },
+    { text: '天忽然为他开了，', delay: 0 },
+    { text: '他就看见神的灵仿佛鸽子降下，落在他身上。', delay: 0 },
+    { text: '从天上有声音说：', delay: 0 },
+    { text: '这是我的爱子，我所喜悦的。', delay: 0 },
+  ];
+
+  const fullText = '耶稣受了洗，随即从水里上来。天忽然为他开了，他就看见神的灵仿佛鸽子降下，落在他身上。从天上有声音说：这是我的爱子，我所喜悦的。';
+
+  let speakQueue = [];
+  let speakIndex = 0;
+
+  function stopAllSpeech() {
+    if (currentUtterance) {
+      currentUtterance.onend = null;
+      currentUtterance.onerror = null;
+      speechSynth.cancel();
+      currentUtterance = null;
+    }
+    speakQueue = [];
+    speakIndex = 0;
+  }
+
+  function speakText(text, onEnd) {
+    return new Promise((resolve) => {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'zh-CN';
+      utter.rate = 0.85;
+      utter.pitch = 1.0;
+      utter.volume = parseFloat(volSlider.value) / 100;
+
+      // 尝试选择中文语音
+      const voices = speechSynth.getVoices();
+      const zhVoice = voices.find(v => v.lang.startsWith('zh-CN') || v.lang.startsWith('zh-TW') || v.lang.startsWith('zh'));
+      if (zhVoice) {
+        utter.voice = zhVoice;
+      }
+
+      utter.onend = () => {
+        currentUtterance = null;
+        resolve();
+        if (onEnd) onEnd();
+      };
+
+      utter.onerror = (e) => {
+        currentUtterance = null;
+        console.warn('Speech error:', e);
+        resolve();
+      };
+
+      currentUtterance = utter;
+      speechSynth.speak(utter);
+    });
+  }
+
+  async function playNarration() {
+    stopAllSpeech();
+    speakIndex = 0;
+
+    // 显示第一段字幕
+    subtitle.textContent = scriptureLines[0].text;
+    subtitle.style.opacity = '1';
+
+    // 逐段播放
+    for (let i = 0; i < scriptureLines.length; i++) {
+      if (!isPlaying) break;
+      subtitle.textContent = scriptureLines[i].text;
+      subtitle.style.opacity = '1';
+
+      // 在第3段（鸽子降下）播放天堂之音
+      if (i === 2) {
+        playHeavenlyChime();
+      }
+
+      await speakText(scriptureLines[i].text);
+
+      // 短暂停顿
+      if (i < scriptureLines.length - 1 && isPlaying) {
+        await new Promise(r => setTimeout(r, 500));
+      }
+    }
+
+    // 播完后回到默认字幕
+    if (isPlaying) {
+      subtitle.textContent = '马太福音 3:16-17';
+      // 循环播放
+      await new Promise(r => setTimeout(r, 2000));
+      if (isPlaying) {
+        playNarration();
+      }
+    }
+  }
+
+  // 预加载语音列表
+  speechSynth.getVoices();
+  speechSynth.onvoiceschanged = () => { speechSynth.getVoices(); };
+
+  // ==================== 主控制 ====================
+  function startAll() {
+    if (isPlaying) return;
+    isPlaying = true;
+
+    getAudioCtx();
+    startRiverSound();
+    playNarration();
+
+    scene.style.boxShadow = '0 20px 60px rgba(255,200,100,0.3), 0 0 100px rgba(255,180,50,0.15)';
+    subtitle.textContent = scriptureLines[0].text;
+  }
+
+  function stopAll() {
+    isPlaying = false;
+    stopAllSpeech();
+    stopRiverSound();
+
+    scene.style.boxShadow = '0 20px 60px rgba(0,0,0,0.5)';
+    subtitle.textContent = '马太福音 3:16-17';
+  }
+
+  function setVolume(val) {
+    const v = parseFloat(val) / 100 * 0.5;
+    if (masterGain) {
+      masterGain.gain.setTargetAtTime(v, audioCtx.currentTime, 0.05);
+    }
+    if (currentUtterance) {
+      currentUtterance.volume = parseFloat(val) / 100;
+    }
+  }
+
+  // ==================== 交互 ====================
+  let hasInteracted = false;
+
+  scene.addEventListener('click', () => {
+    if (!hasInteracted) {
+      hasInteracted = true;
+    }
+
+    if (isPlaying) {
+      stopAll();
+    } else {
+      startAll();
+    }
+  });
+
+  volSlider.addEventListener('input', () => {
+    setVolume(volSlider.value);
+    const v = parseInt(volSlider.value);
+    if (v === 0) volIcon.textContent = '🔇';
+    else if (v < 30) volIcon.textContent = '🔉';
+    else volIcon.textContent = '🔊';
+  });
+
+  volIcon.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (parseInt(volSlider.value) > 0) {
+      volSlider.value = 0;
+      setVolume(0);
+      volIcon.textContent = '🔇';
+    } else {
+      volSlider.value = 60;
+      setVolume(60);
+      volIcon.textContent = '🔊';
+    }
+  });
+
+  window.addEventListener('beforeunload', () => {
+    stopAllSpeech();
+    stopRiverSound();
+  });
+
+  console.log('✝️  耶稣受洗场景已就绪 —— 点击画面播放经文朗诵');
+  console.log('📖 马太福音 3:16-17');
+})();
+</script>
+</body>
+</html>
