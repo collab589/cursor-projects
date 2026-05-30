@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"from PIL import Image; print\\('Pillow ready'\\)\")",
+      "Bash(python -c \"from PIL import Image; print\\('Pillow ready'\\)\")",
+      "Bash(pip install *)",
+      "Bash(python create_door_gif.py)"
+    ]
+  }
+}
